@@ -3,7 +3,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
-public class Admin_login extends User_login implements login {
+public class Admin_login extends User_login {
 
     Admin_login(Statement stmt) {
         setStmt(stmt);
