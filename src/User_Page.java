@@ -13,7 +13,8 @@ public class User_Page {
                 Enter 4 to withdraw/deposit
                 Enter 5 to send money
                 Enter 6 to delete account
-                Enter 7 to exit""");
+                Enter 7 to enter Loan page
+                Enter 8 to exit""");
     }
 
     public static void display_transactions(Statement stmt, String str) throws SQLException {
@@ -91,7 +92,7 @@ public class User_Page {
         while (true) {
             print();
             String key = sc.nextLine();
-            if (Objects.equals(key, "7")) {
+            if (Objects.equals(key, "8")) {
                 System.out.println("Logout successful.");
                 return false;
             } else if (Objects.equals(key, "1")) {
@@ -149,11 +150,13 @@ public class User_Page {
                 Transaction_InterAccounts.doTransaction(stmt, str);
                 ResultSet rst = stmt.executeQuery("select balance from account where acc_no = '" + str + "';");
                 while (rst.next()) {
-                    System.out.println("remaining balance is:" + rst.getDouble(1));
+                    System.out.println("Remaining balance is:" + rst.getDouble(1));
                 }
             } else if (Objects.equals(key, "6")) {
                 Account_Main obj1 = new Account_Main(stmt);
                 return obj1.delete(Integer.parseInt(str));
+            } else if (Objects.equals(key, "7")) {
+                Loan_main.loan_main(stmt, Integer.parseInt(str));
             } else {
                 System.out.println("Enter a valid key!!");
             }
