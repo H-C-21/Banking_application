@@ -27,7 +27,7 @@ public class Main_Page {
                     Scanner sc = new Scanner(System.in);
                     String key = sc.nextLine();
                     if (Objects.equals(key, "4")) {
-                        System.out.println("Thank You! Please use our app again!!\nBye");
+                        System.out.println("Thank You! Please use our app again!!");
                         break;
                     } else if (Objects.equals(key, "1")) {
                         Account_Main obj1 = new Account_Main(stmt);
