@@ -105,7 +105,7 @@ abstract class Loan_class implements Loan_help {
     public void installment_pay(double amount, int acc, int loan_id) {
         try {
             Withdraw_Deposit obj = new Withdraw_Deposit(stmt, String.valueOf(acc));
-            if (!obj.withdraw(amount, "BANK(FOR LOAN)")){
+            if (!obj.withdraw(amount, "BANK(FOR LOAN)")) {
                 System.out.println("Insufficient balance. Try later!");
             }
             getStmt().execute("update loans " +
@@ -126,4 +126,19 @@ abstract class Loan_class implements Loan_help {
             System.out.println(e);
         }
     }
+
+    public void initialize_new_loan(String type, double amount_left, Loan obj) {
+        try {
+            getStmt().execute("insert into loans (acc_no, loan_amount, date_issued, `loan type`, `amount left`, `installment remaining`) " +
+                    "values(" + getAcc() + ", " + obj.getPrincipal_amount() +
+                    ", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');");
+            Withdraw_Deposit dep = new Withdraw_Deposit(getStmt(), String.valueOf(getAcc()));
+            dep.deposit(obj.getPrincipal_amount(), "LOAN AMOUNT");
+            System.out.println("Loan approved successfully. Amount deposited in your bank.");
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    abstract void loan_approve(double ROI, String type);
 }

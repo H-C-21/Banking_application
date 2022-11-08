@@ -4,23 +4,8 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Loan_types extends Loan_class {
-
     public Loan_types(Statement stmt, int acc) {
         super(stmt, acc);
-    }
-
-    @Override
-    public void initialize_new_loan(String type, double amount_left, Loan obj) {
-        try {
-            getStmt().execute("insert into loans (acc_no, loan_amount, date_issued, `loan type`, `amount left`, `installment remaining`) " +
-                    "values(" + getAcc() + ", " + obj.getPrincipal_amount() +
-                    ", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear()*12 + "');");
-            Withdraw_Deposit dep = new Withdraw_Deposit(getStmt(), String.valueOf(getAcc()));
-            dep.deposit(obj.getPrincipal_amount(), "LOAN AMOUNT");
-            System.out.println("Loan approved successfully. Amount deposited in your bank.");
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
     }
 
     public static void print() {
@@ -59,38 +44,29 @@ public class Loan_types extends Loan_class {
         return obj;
     }
 
+    @Override
+    public void loan_approve(double ROI, String type) {
+        Loan obj = loan_input(ROI);
+        setObject(obj);
+        double a = interest_calculate();
+        System.out.println("Your interest will be:" + a);
+        double amount_left = obj.getPrincipal_amount() + a;
+        System.out.println("You have to pay an amount of " + amount_left / (obj.getYear() * 12) + " monthly.");
+        initialize_new_loan(type, amount_left, obj);
+    }
+
     public void Loan_take() {
         print();
         Scanner sc = new Scanner(System.in);
         String key = sc.nextLine();
         if (Objects.equals(key, "1")) {
-            Loan home = loan_input(8);
-            setObject(home);
-            System.out.println("Your interest will be:" + interest_calculate());
-            double amount_left = home.getPrincipal_amount() + interest_calculate();
-            System.out.println("You have to pay an amount of " + amount_left / (home.getYear() * 12) + " monthly.");
-            initialize_new_loan("HOME", amount_left, home);
+            loan_approve(8, "HOME");
         } else if (Objects.equals(key, "2")) {
-            Loan education = loan_input(6.5);
-            setObject(education);
-            System.out.println("Your interest will be:" + interest_calculate());
-            double amount_left = education.getPrincipal_amount() + interest_calculate();
-            System.out.println("You have to pay an amount of " + amount_left / (education.getYear() * 12) + " monthly.");
-            initialize_new_loan("EDUCATION", amount_left, education);
+            loan_approve(6.5, "EDUCATION");
         } else if (Objects.equals(key, "3")) {
-            Loan personal = loan_input(8);
-            setObject(personal);
-            System.out.println("Your interest will be:" + interest_calculate());
-            double amount_left = personal.getPrincipal_amount() + interest_calculate();
-            System.out.println("You have to pay an amount of " + amount_left / (personal.getYear() * 12) + " monthly.");
-            initialize_new_loan("PERSONAL", amount_left, personal);
+            loan_approve(8.5, "PERSONAL");
         } else if (Objects.equals(key, "4")) {
-            Loan car = loan_input(7);
-            setObject(car);
-            System.out.println("Your interest will be:" + interest_calculate());
-            double amount_left = car.getPrincipal_amount() + interest_calculate();
-            System.out.println("You have to pay an amount of " + amount_left / (car.getYear() * 12) + " monthly.");
-            initialize_new_loan("CAR", amount_left, car);
+            loan_approve(7, "CAR");
         }
     }
 

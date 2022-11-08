@@ -40,7 +40,7 @@ public class Loan_main {
                 System.out.println("Fetching your loans....");
                 if (display(stmt, acc) == 0) {
                     System.out.println("You do not have any active loan currently");
-                    return;
+                    continue;
                 }
                 System.out.print("Enter corresponding loan id for which to pay installment:");
                 int id;
