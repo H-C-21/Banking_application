@@ -14,7 +14,8 @@ public class User_Page {
                 Enter 5 to send money
                 Enter 6 to delete account
                 Enter 7 to enter Loan page
-                Enter 8 to exit""");
+                Enter 8 to view Fixed Deposits
+                Enter 9 to exit""");
     }
 
     public static void display_transactions(Statement stmt, String str) throws SQLException {
@@ -92,7 +93,7 @@ public class User_Page {
         while (true) {
             print();
             String key = sc.nextLine();
-            if (Objects.equals(key, "8")) {
+            if (Objects.equals(key, "9")) {
                 System.out.println("Logout successful.");
                 return false;
             } else if (Objects.equals(key, "1")) {
@@ -157,6 +158,9 @@ public class User_Page {
                 return obj1.delete(Integer.parseInt(str));
             } else if (Objects.equals(key, "7")) {
                 Loan_main.loan_main(stmt, Integer.parseInt(str));
+            } else if (Objects.equals(key, "8")) {
+                fixed_deposit_main obj = new fixed_deposit_main(stmt, Integer.parseInt(str));
+                obj.fd_main();
             } else {
                 System.out.println("Enter a valid key!!");
             }

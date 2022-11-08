@@ -12,7 +12,7 @@ public class Loan_main {
             ResultSet rst = stmt.executeQuery("select loan_id, loan_amount, date_issued, `loan type`, `amount left`, `installment remaining` " +
                     "from loans where acc_no = '" + acc + "';");
             while (rst.next()) {
-                System.out.printf("Loan ID:%-10d Loan Amount:%-15f Date Issued:%-20s Loan Type: %-10s Amount Left:%-15f Installments Remaining:%5d\n",
+                System.out.printf("Loan ID:%-10d Loan Amount:%-15f Date Issued:%-20s Loan Type: %-10s Amount Left:%-15f Installments Remaining:%-5d\n",
                         rst.getInt(1), rst.getDouble(2), rst.getDate(3), rst.getString(4),
                         rst.getDouble(5), rst.getInt(6));
                 count++;
@@ -57,13 +57,13 @@ public class Loan_main {
                     ResultSet rst = stmt.executeQuery("select `amount left`, `installment remaining` from loans where loan_id = " + id + ";");
                     rst.next();
                     double amount = rst.getDouble(1) / rst.getInt(2);
-                    Loan_types obj = new Loan_types(stmt, acc);
+                    Loan_helper obj = new Loan_helper(stmt, acc);
                     obj.installment_pay(amount, acc, id);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
             } else if (Objects.equals(key, "3")) {
-                Loan_types obj = new Loan_types(stmt, acc);
+                Loan_helper obj = new Loan_helper(stmt, acc);
                 obj.Loan_take();
             } else {
                 break;
