@@ -56,6 +56,17 @@ public class Admin_page {
         String str = sc.nextLine();
         Account_Main obj = new Account_Main(stmt);
         obj.display(Integer.parseInt(str));
+        ResultSet rst = stmt.executeQuery("select * from loans NATURAL JOIN account where acc_no = '" + str + "';");
+        int count = 0;
+        while (rst.next()) {
+            count++;
+        }
+        if (count != 0) {
+            System.out.println("The customer have active loans. Press 1 to view them\nAnything else to exit");
+            if (Objects.equals(sc.nextLine(), "1")) {
+                Loan_main.display(stmt, Integer.parseInt(str));
+            }
+        }
     }
 
     public static void info_all(Statement stmt) throws SQLException {
@@ -68,7 +79,11 @@ public class Admin_page {
     public static boolean page(Statement stmt) throws SQLException {
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.println("Enter 1 to view queries\nEnter 2 view information of a account\nEnter 3 to view information of all accounts\nEnter any other to go back and logout");
+            System.out.println("""
+                    Enter 1 to view queries
+                    Enter 2 view information of a account
+                    Enter 3 to view information of all accounts
+                    Enter any other to go back and logout""");
             String key = sc.nextLine();
             if (Objects.equals(key, "1")) {
                 view_queries(stmt);

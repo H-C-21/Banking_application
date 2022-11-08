@@ -24,8 +24,8 @@ public class User_Page {
         while (rst.next()) {
             count++;
             try {
-                System.out.printf(count + ") Amount:%-20s" + "Date:" + rst.getDate(2) + "        " +
-                        "Time:" + rst.getTime(2) + "        Transaction To/From:%s\n", rst.getString(1), rst.getString(3));
+                System.out.printf("%-5d Amount:%-30s" + "Date:" + rst.getDate(2) + "        " +
+                        "Time:" + rst.getTime(2) + "        Transaction To/From:%s\n", count, rst.getString(1), rst.getString(3));
             } catch (SQLException e) {
                 System.out.println(e);
             }

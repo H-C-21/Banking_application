@@ -104,14 +104,16 @@ abstract class Loan_class implements Loan_help {
     @Override
     public void installment_pay(double amount, int acc, int loan_id) {
         try {
+            Withdraw_Deposit obj = new Withdraw_Deposit(stmt, String.valueOf(acc));
+            if (!obj.withdraw(amount, "BANK(FOR LOAN)")){
+                System.out.println("Insufficient balance. Try later!");
+            }
             getStmt().execute("update loans " +
                     "set `amount left` = `amount left` - '" + amount + "'" +
                     "where loan_id = '" + loan_id + "';");
             getStmt().execute("update loans " +
                     "set `installment remaining` = `installment remaining` - 1 " +
                     "where loan_id = '" + loan_id + "';");
-            Withdraw_Deposit obj = new Withdraw_Deposit(stmt, String.valueOf(acc));
-            obj.withdraw(amount, "BANK(FOR LOAN)");
             System.out.println("Loan installment paid successfully.");
             ResultSet rst = stmt.executeQuery("select `amount left`, `installment remaining` from loans where loan_id = '" + loan_id + "'");
             rst.next();
