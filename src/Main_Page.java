@@ -5,7 +5,13 @@ import java.util.Scanner;
 public class Main_Page {
 
     public static void menu_print() {
-        System.out.println("Enter 1 to add an account\nEnter 2 to login(as customer)\nEnter 3 to login(as administrator)\nEnter 4 to exit");
+        System.out.println("""
+                Enter 1 to add an account
+                Enter 2 to login(as customer)
+                Enter 3 to login(as administrator)
+                Enter 4 to submit and view Queries
+                Enter 5 to submit feedback
+                Enter anything else to exit""");
     }
 
     public static void main(String[] args) {
@@ -26,10 +32,7 @@ public class Main_Page {
                     menu_print();
                     Scanner sc = new Scanner(System.in);
                     String key = sc.nextLine();
-                    if (Objects.equals(key, "4")) {
-                        System.out.println("Thank You! Please use our app again!!");
-                        break;
-                    } else if (Objects.equals(key, "1")) {
+                    if (Objects.equals(key, "1")) {
                         Account_Main obj1 = new Account_Main(stmt);
                         obj1.create();
                     } else if (Objects.equals(key, "2")) {
@@ -41,8 +44,16 @@ public class Main_Page {
                     } else if (Objects.equals(key, "3")) {
                         Admin_login obj = new Admin_login(stmt);
                         admin_login = obj.checkAuthentication();
+                    } else if (Objects.equals(key, "4")) {
+                        Query_main obj = new Query_main(stmt);
+                        obj.main();
+                    } else if (Objects.equals(key, "5")) {
+                        Feedback_main obj = new Feedback_main(stmt);
+                        query_fdb obj1 = obj.take_input();
+                        obj.submit(obj1);
                     } else {
-                        System.out.println("Enter the correct key value!!");
+                        System.out.println("Thank You for using the App!!");
+                        break;
                     }
                 } else if (admin_login) {
                     admin_login = Admin_page.page(stmt);
