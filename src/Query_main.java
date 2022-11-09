@@ -11,9 +11,9 @@ public class Query_main extends query_fdb_help {
 
     void list_all() {
         Scanner sc = new Scanner(System.in);
-        System.out.printf("Enter your name:");
+        System.out.print("Enter your name:");
         String name = sc.nextLine();
-        System.out.printf("Enter your Email Id:");
+        System.out.print("Enter your Email Id:");
         String email = sc.nextLine();
         try {
             ResultSet rst = getStmt().executeQuery("select * from Query where Name = '" + name + "' and Email_ID = '" + email + "';");

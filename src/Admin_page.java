@@ -74,6 +74,78 @@ public class Admin_page {
         }
     }
 
+    public static void solve_query(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.print("Enter Query ID:");
+            try {
+                int a = sc.nextInt();
+                int count = 0;
+                try {
+                    ResultSet rst = stmt.executeQuery("select Status from  Query where `Query ID` = '" + a + "';");
+                    while (rst.next()) {
+                        if (Objects.equals(rst.getString(1), "Resolved")) {
+                            System.out.println("Query already resolved.");
+                        } else {
+                            stmt.execute("update Query set Status = 'Resolved' where `Query ID` = '" + a + "';");
+                            System.out.println("Query resolved successfully.");
+                            return;
+                        }
+                        count++;
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+                if (count == 0) {
+                    System.out.println("No matching query ID!!");
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Enter numeric values only.");
+                sc.nextLine();
+            }
+        }
+    }
+
+    public static void display_resultSet(ResultSet rst, String status) throws SQLException {
+        int count = 0;
+        while (rst.next()) {
+            System.out.printf("Query ID:%-10d Problem:%-100s Date Submitted:%-10s\n",
+                    rst.getInt(1), rst.getString(5), rst.getDate(6));
+            count++;
+        }
+        if (count == 0) {
+            System.out.println("No " + status + " Query to show!");
+        }
+    }
+
+    public static void view_admin_queries(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("Press 1 to view Unresolved Queries\nPress 2 to view Resolved Queries\nPress 3 to solve a query\nPress anything else for exit");
+            String key = sc.nextLine();
+            if (Objects.equals(key, "1")) {
+                try {
+                    ResultSet rst = stmt.executeQuery("select * from Query where Status = 'Unresolved';");
+                    display_resultSet(rst, "Unresolved");
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            } else if (Objects.equals(key, "2")) {
+                try {
+                    ResultSet rst = stmt.executeQuery("select * from Query where Status = 'Resolved';");
+                    display_resultSet(rst, "Resolved");
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            } else if (Objects.equals(key, "3")) {
+                solve_query(stmt);
+            } else {
+                break;
+            }
+        }
+    }
+
     public static boolean page(Statement stmt) throws SQLException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -81,6 +153,8 @@ public class Admin_page {
                     Enter 1 view information of a account
                     Enter 2 to view information of all accounts
                     Enter 3 to view and pay FD installments
+                    Enter 4 to view Queries
+                    Enter 5 to view Feedback
                     Enter any other to go back and logout""");
             String key = sc.nextLine();
             if (Objects.equals(key, "1")) {
@@ -89,6 +163,21 @@ public class Admin_page {
                 info_all(stmt);
             } else if (Objects.equals(key, "3")) {
                 view_fd(stmt);
+            } else if (Objects.equals(key, "4")) {
+                view_admin_queries(stmt);
+            } else if (Objects.equals(key, "5")) {
+                Feedback_main obj = new Feedback_main(stmt);
+                while (true) {
+                    System.out.println("Enter 1 to view Feedback sorted by rating\nEnter 2 to view all Feedbacks\nEnter anything else to exit");
+                    String key2 = sc.nextLine();
+                    if (Objects.equals(key2, "1")) {
+                        obj.list_specific();
+                    } else if (Objects.equals(key2, "2")) {
+                        obj.list_all();
+                    } else {
+                        break;
+                    }
+                }
             } else {
                 System.out.println("Successfully logged out!!");
                 return false;

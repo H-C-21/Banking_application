@@ -49,8 +49,8 @@ public class Feedback_main extends query_fdb_help {
             ResultSet rs = getStmt().executeQuery("select * from Feedback;");
             int count = 0;
             while (rs.next()) {
-                System.out.printf("Name:%-30s Email ID:%-30s Text:%-100s Rating:%-5d Date Submitted:%-10s\n",
-                        rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDate(5));
+                System.out.printf("Name:%-30s Email ID:%-30s Text:%-100s Rating:%-10s Date Submitted:%-10s\n",
+                        rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5));
                 count++;
             }
             if (count == 0) {
@@ -73,7 +73,7 @@ public class Feedback_main extends query_fdb_help {
                 count++;
             }
             if (count == 0) {
-                System.out.println("No feedback with " + rating + " found!");
+                System.out.println("No feedback with " + rating + " rating found!");
             }
         } catch (Exception e) {
             System.out.println(e);
