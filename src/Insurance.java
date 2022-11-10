@@ -61,6 +61,7 @@ public class Insurance implements Date_Time {
                         "', " + ((count2 + count2 / 110) + 101) + ", '" + date1 + "');");
 
                 int l = (int) ((count2 + count2 / 110) + 101);
+                System.out.println();
                 System.out.println("You Have Successfully Opted for " + scheme + " Insurance, Your Insurance ID is " + l);
                 System.out.println("Default Starting amount of 500 has been deducted from your Account, this will go towards future premium payments");
                 System.out.println();
