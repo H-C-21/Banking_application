@@ -4,7 +4,7 @@ BANKING APPLICATION
 
 #### Members:
 1. Mehul Agarwal (Project Lead)
-2  Kushal Gajjar
+2. Kushalkumar Dipakkumar Gajjar
 3. Harshit Chauhan
 4. Virendra Yadav
 5. Vinay Yadam
