@@ -2,6 +2,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class InsuranceUtil {
@@ -50,41 +51,46 @@ public class InsuranceUtil {
             String flag = sc.nextLine();
 
             switch (flag) {
-                case "1" -> {
+                case "1":
                     Health ins1 = new Health();
                     ins1.print();                         //Shows Insurance Plan Information and ask whether to proceed or not
-                    int h1 = sc.nextInt();
-                    if (h1 == 1) {
+                    String h1 = sc.nextLine();
+                    if (Objects.equals(h1, "1")) {
                         ins1.newInsurance(stmt, acc);
                     }
-
-                }
-                case "2" -> {
+                    break;
+                case "2":
                     Life ins2 = new Life();
                     ins2.print();
-                    int h2 = sc.nextInt();
-                    if (h2 == 1) {
+                    String h2 = sc.nextLine();
+                    if (Objects.equals(h2, "1")) {
                         ins2.newInsurance(stmt, acc);
                     }
-                }
-                case "3" -> {
+                    break;
+                case "3":
                     Car ins3 = new Car();
                     ins3.print();
-                    int h3 = sc.nextInt();
-                    if (h3 == 1) {
+                    String h3 = sc.nextLine();
+                    if (Objects.equals(h3, "1")) {
                         ins3.newInsurance(stmt, acc);
                     }
-                }
-                case "4" -> {
+                    break;
+                case "4":
                     Home ins4 = new Home();
                     ins4.print();
-                    int h4 = sc.nextInt();
-                    if (h4 == 1) {
+                    String h4 = sc.nextLine();
+                    if (Objects.equals(h4, "1")) {
                         ins4.newInsurance(stmt, acc);
                     }
-                }
-                case "5" -> running = false;
-                default -> System.out.println("Wrong Key, please enter Correctly!!!");
+                    break;
+
+                case "5":
+                    running = false;
+                    break;
+
+                default:
+                    System.out.println("You have entered a Wrong key please select again");
+                    break;
             }
             //stmt.execute("insert into insurance (acc_no, loan_am, date_issued, `ins_type`, `amount left`, `installment remaining`) " +         //"values(" + getAcc() + ", " + obj.getPrincipal_amount() +
             //", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');
