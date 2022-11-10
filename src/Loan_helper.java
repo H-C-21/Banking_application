@@ -77,7 +77,7 @@ public class Loan_helper extends loan_fd {
         try {
             getStmt().execute("insert into loans (acc_no, loan_amount, date_issued, `loan type`, `amount left`, `installment remaining`) " +
                     "values(" + getAcc() + ", " + obj.getPrincipal_amount() +
-                    ", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');");
+                    ", '" + obj.getDate_Time() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');");
             Withdraw_Deposit dep = new Withdraw_Deposit(getStmt(), String.valueOf(getAcc()));
             dep.deposit(obj.getPrincipal_amount(), "LOAN AMOUNT");
             System.out.println("Loan approved successfully. Amount deposited in your bank.");

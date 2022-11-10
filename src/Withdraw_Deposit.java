@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class Withdraw_Deposit extends Account implements Time {
+public class Withdraw_Deposit extends Account implements Date_Time {
 
     private double amount;
     private String whichPerson;
@@ -44,7 +44,7 @@ public class Withdraw_Deposit extends Account implements Time {
         }
         getStmt().execute("update account set balance = balance - '" + getAmount() + "' where acc_no =" + getAcc_no() + ";");
         getStmt().execute("insert into transactions " +
-                "select account.acc_no, '-" + getAmount() + "','" + getTime() + "', '" + getWhichPerson() + "' from account where account.acc_no = '" + getAcc_no() + "' LIMIT 1;");
+                "select account.acc_no, '-" + getAmount() + "','" + getDate_Time() + "', '" + getWhichPerson() + "' from account where account.acc_no = '" + getAcc_no() + "' LIMIT 1;");
         return true;
     }
 
@@ -54,7 +54,7 @@ public class Withdraw_Deposit extends Account implements Time {
         try {
             getStmt().execute("update account set balance = balance + '" + getAmount() + "' where acc_no =" + getAcc_no() + ";");
             getStmt().execute("insert into transactions " +
-                    "select account.acc_no, '+" + getAmount() + "','" + getTime() + "', '" + getWhichPerson() + "' from account where account.acc_no = '" + getAcc_no() + "' LIMIT 1;");
+                    "select account.acc_no, '+" + getAmount() + "','" + getDate_Time() + "', '" + getWhichPerson() + "' from account where account.acc_no = '" + getAcc_no() + "' LIMIT 1;");
             return true;
         } catch (SQLException e) {
             System.out.println(e);

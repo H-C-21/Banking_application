@@ -43,7 +43,7 @@ public class fixed_deposit extends loan_fd {
             }
             getStmt().execute("insert into fixed_deposits (acc_no, amount, date_issued, installment_remaining, amount_remaining) " +
                     "values(" + getAcc() + ", " + obj.getPrincipal_amount() +
-                    ", '" + obj.getTime() + "', " + obj.getYear() * 12 + ", '" + amount_left + "');");
+                    ", '" + obj.getDate_Time() + "', " + obj.getYear() * 12 + ", '" + amount_left + "');");
             System.out.println("FD amount successfully withdrawn from your bank account.");
         } catch (SQLException e) {
             System.out.println(e);

@@ -63,9 +63,9 @@ abstract class loan_fd implements Loan_fd_help {
         initialize_new(type, amount_left, obj);
     }
 }
-class Loan_fd implements Time {
+class Loan_fd implements Date_Time {
     private double principal_amount;
-    private final String dateIssued = getTime();
+    private final String dateIssued = getDate_Time();
     private double roi;
     private String type_of_loan;
     private int year;

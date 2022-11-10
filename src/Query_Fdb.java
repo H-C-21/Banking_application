@@ -3,11 +3,11 @@ public interface Query_Fdb {
     void submit(query_fdb obj);
 }
 
-class query_fdb implements Time{
+class query_fdb implements Date_Time{
     private String name;
     private String email_id;
     private String text;
-    private final String time = getTime();
+    private final String time = getDate_Time();
 
     public String get_time() {
         return time;

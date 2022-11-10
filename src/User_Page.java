@@ -12,9 +12,10 @@ public class User_Page {
                 Enter 3 to withdraw/deposit
                 Enter 4 to send money
                 Enter 5 to delete account
-                Enter 6 to enter Loan page
-                Enter 7 to view Fixed Deposits
-                Enter 8 to exit""");
+                Enter 6 to view and Register for Insurance
+                Enter 7 to view and Opt for Loan
+                Enter 8 to view and Opt for FD
+                Enter anything else to exit""");
     }
 
     public static void display_transactions(Statement stmt, String str) throws SQLException {
@@ -51,10 +52,7 @@ public class User_Page {
         while (true) {
             print();
             String key = sc.nextLine();
-            if (Objects.equals(key, "8")) {
-                System.out.println("Logout successful.");
-                return false;
-            } else if (Objects.equals(key, "1")) {
+            if (Objects.equals(key, "1")) {
                 display_account_info(stmt, str);
             } else if (Objects.equals(key, "2")) {
                 Edit_Account_Details obj = new Edit_Account_Details(stmt, str);
@@ -113,12 +111,17 @@ public class User_Page {
                 Account_Main obj1 = new Account_Main(stmt);
                 return obj1.delete(Integer.parseInt(str));
             } else if (Objects.equals(key, "6")) {
-                Loan_main.loan_main(stmt, Integer.parseInt(str));
+                Insurance_main obj = new Insurance_main();
+                int acc = Integer.parseInt(str);
+                obj.InsurancePage(stmt, str);
             } else if (Objects.equals(key, "7")) {
+                Loan_main.loan_main(stmt, Integer.parseInt(str));
+            } else if (Objects.equals(key, "8")) {
                 fixed_deposit_main obj = new fixed_deposit_main(stmt, Integer.parseInt(str));
                 obj.fd_main();
             } else {
-                System.out.println("Enter a valid key!!");
+                System.out.println("Logout successful!");
+                return false;
             }
         }
     }
