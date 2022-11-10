@@ -14,7 +14,7 @@ public class InsuranceUtil {
         int counti = 0;
         try {
             ResultSet rst1 = stmt.executeQuery("select ins_id, ins_type, date_issued,amount_dep " + "from insurance where acc_no = " + acc + ";");
-            System.out.println("Insurance ID      Insurance Type        Date Issued      Insured till");
+            System.out.println("Insurance ID         Insurance Type           Date Issued          Insured till");
 
 
             while (rst1.next()) {
@@ -23,7 +23,7 @@ public class InsuranceUtil {
                 String type = rst1.getString("ins_type");
                 Date iss = rst1.getDate("date_issued");
                 int amt = rst1.getInt("amount_dep");
-                System.out.printf("%-20d %-20s %-20s %-20d\n", id, type, iss, amt);
+                System.out.printf("    " + "%-20d %-20s %-20s %-20d\n", id, type, iss, amt);
                 ++counti;
             }
         } catch (SQLException e) {
