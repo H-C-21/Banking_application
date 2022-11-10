@@ -6,18 +6,14 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class InsuranceUtil {
-
     static Scanner sc = new Scanner(System.in);
 
     public static void display(Statement stmt, String acc) {
-
         System.out.println("Inside display");
         int counti = 0;
         try {
             ResultSet rst1 = stmt.executeQuery("select ins_id, ins_type, date_issued,amount_dep " + "from insurance where acc_no = " + acc + ";");
             System.out.println("Insurance ID         Insurance Type           Date Issued          Insured till");
-
-
             while (rst1.next()) {
 
                 int id = rst1.getInt("ins_id");
@@ -32,7 +28,7 @@ public class InsuranceUtil {
         }
         if (counti == 0) {
             System.out.println();
-            System.out.println("You are Currently Not registered under any Insurance Schemes, Press 1 to opt");
+            System.out.println("You are Currently Not registered under any Insurance Schemes, Press 1 to opt\n");
         }
 
     }
