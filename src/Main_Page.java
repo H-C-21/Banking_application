@@ -37,7 +37,7 @@ public class Main_Page {
                         obj1.create();
                     } else if (Objects.equals(key, "2")) {
                         System.out.print("Enter the account number:");
-                        int acc = sc.nextInt();
+                        String acc = sc.nextLine();
                         str = String.valueOf(acc);
                         User_login obj = new User_login(stmt, str);
                         login_flag = obj.checkAuthentication();
@@ -61,7 +61,7 @@ public class Main_Page {
                     try {
                         login_flag = User_Page.page(stmt, str);
                     } catch (Exception e) {
-                        System.out.println("Unable to display login page");
+                        System.out.println(e);
                     }
                 }
             }

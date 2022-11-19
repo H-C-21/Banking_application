@@ -4,7 +4,7 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Account {
+abstract class Account implements Account_Interface {
     private String password;
     private String name;
     private double balance;
@@ -50,14 +50,8 @@ public class Account {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-}
 
-class Account_Main extends Account {
-    Account_Main(Statement stmt) {
-        setStmt(stmt);
-    }
-
-    void create() {
+    public void create() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the name:");
         setName(sc.nextLine());
@@ -94,7 +88,7 @@ class Account_Main extends Account {
         }
     }
 
-    boolean delete(int acc_no) throws SQLException {
+    public boolean delete(int acc_no) throws SQLException {
         Scanner sc = new Scanner(System.in);
         setAcc_no(acc_no);
         User_login obj = new User_login(getStmt(), String.valueOf(acc_no));
@@ -114,10 +108,16 @@ class Account_Main extends Account {
         return true;
     }
 
-    void display(int acc) throws SQLException {
+    public void display(int acc) throws SQLException {
         ResultSet rst = getStmt().executeQuery("select acc_no, customer_name, balance from account where acc_no = '" + acc + "';");
         while (rst.next()) {
             System.out.printf("Account number:%d\nName:%s\nBalance:%.2f\n", rst.getInt(1), rst.getString(2), rst.getDouble(3));
         }
+    }
+}
+
+class Account_Main extends Account {
+    Account_Main(Statement stmt) {
+        setStmt(stmt);
     }
 }

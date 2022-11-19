@@ -41,8 +41,8 @@ public class User_Page {
         obj.display(Integer.parseInt(str));
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter 1 to show transactions\nEnter any other to exit");
-        int key = sc.nextInt();
-        if (key == 1) {
+        String key = sc.nextLine();
+        if (Objects.equals(key, "1")) {
             display_transactions(stmt, str);
         }
     }
