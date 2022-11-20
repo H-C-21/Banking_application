@@ -3,7 +3,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class Withdraw_Deposit extends Account implements Date_Time {
+public class Withdraw_Deposit extends Account_Main implements Date_Time {
 
     private double amount;
     private String whichPerson;
@@ -25,7 +25,7 @@ public class Withdraw_Deposit extends Account implements Date_Time {
     }
 
     Withdraw_Deposit(Statement stmt, String str) {
-        setStmt(stmt);
+        super(stmt);
         setAcc_no(Integer.parseInt(str));
     }
 

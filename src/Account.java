@@ -50,7 +50,9 @@ abstract class Account implements Account_Interface {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+}
 
+class Account_Main extends Account {
     public void create() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the name:");
@@ -114,9 +116,7 @@ abstract class Account implements Account_Interface {
             System.out.printf("Account number:%d\nName:%s\nBalance:%.2f\n", rst.getInt(1), rst.getString(2), rst.getDouble(3));
         }
     }
-}
 
-class Account_Main extends Account {
     Account_Main(Statement stmt) {
         setStmt(stmt);
     }

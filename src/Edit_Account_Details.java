@@ -3,10 +3,10 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Edit_Account_Details extends Account {
+public class Edit_Account_Details extends Account_Main {
 
     Edit_Account_Details(Statement stmt, String str) {
-        setStmt(stmt);
+        super(stmt);
         setAcc_no(Integer.parseInt(str));
     }
 
