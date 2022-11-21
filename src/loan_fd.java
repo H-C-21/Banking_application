@@ -1,4 +1,6 @@
 import java.sql.Statement;
+import java.util.Objects;
+import java.util.Scanner;
 
 import static java.lang.Math.pow;
 
@@ -9,6 +11,7 @@ interface Loan_fd_help {
 
     void initialize_new(String type, double amount_left, Loan_fd obj);
 }
+
 abstract class loan_fd implements Loan_fd_help {
     private Statement stmt;
 
@@ -60,9 +63,14 @@ abstract class loan_fd implements Loan_fd_help {
         System.out.println("Your interest will be:" + a);
         double amount_left = obj.getPrincipal_amount() + a;
         System.out.println("You have to pay an amount of " + amount_left / (obj.getYear() * 12) + " monthly.");
-        initialize_new(type, amount_left, obj);
+        System.out.println("Enter 1 to confirm\nEnter anything else to go back");
+        Scanner sc = new Scanner(System.in);
+        if (Objects.equals(sc.nextLine(), "1")) {
+            initialize_new(type, amount_left, obj);
+        }
     }
 }
+
 class Loan_fd implements Date_Time {
     private double principal_amount;
     private final String dateIssued = getDate_Time();
