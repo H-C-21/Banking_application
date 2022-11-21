@@ -114,7 +114,43 @@ public class cmdArguments {
             } catch (Exception e) {
                 System.out.println("Illegal argument or arguments does not match!!");
             }
-        }else {
+        } else if (Objects.equals(args[0], "--querybystatus") && Objects.equals(args[1], "resolved")) {
+            ResultSet rst = stmt.executeQuery("select * from Query where Status = 'Resolved';");
+            Admin_page.display_resultSet(rst, "Solved");
+        } else if (Objects.equals(args[0], "--querybystatus") && Objects.equals(args[1], "unresolved")) {
+            ResultSet rst = stmt.executeQuery("select * from Query where Status = 'Unresolved';");
+            Admin_page.display_resultSet(rst, "Unresolved");
+        } else if (Objects.equals(args[0], "--querysolve")) {
+            try {
+                stmt.execute("update Query set Status = 'Resolved' where `Query ID` = '" + args[1] + "';");
+                System.out.println("Query resolved successfully.");
+            } catch (Exception e) {
+                System.out.println("Illegal argument or arguments does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--querydisplay")) {
+            try {
+                ResultSet rst = stmt.executeQuery("select * from Query where `Query ID` = '" + args[1] + "';");
+                rst.next();
+                System.out.printf("Problem:%-100s Status:%-20s Date Submitted:%-10s\n",
+                        rst.getString(5), rst.getString(4), rst.getDate(6));
+            } catch (Exception e) {
+                System.out.println("Illegal argument or argument does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--querydelete")) {
+            try {
+                stmt.execute("delete from Query where `Query ID` ='" + args[1] + "';");
+                ResultSet rst = stmt.executeQuery("select * from Query;");
+                while (rst.next()) {
+                    System.out.printf("Query ID:%-10d Problem:%-100s Date Submitted:%-10s\n",
+                            rst.getInt(1), rst.getString(5), rst.getDate(6));
+                }
+            } catch (Exception e) {
+                System.out.println("Illegal argument or argument does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--viewfeedback")) {
+            Feedback_main obj = new Feedback_main(stmt);
+            obj.list_all();
+        } else {
             System.out.println("Illegal argument or arguments does not match!!");
         }
     }
