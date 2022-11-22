@@ -3,9 +3,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
+import static java.lang.Math.pow;
 import static java.lang.System.exit;
 
-public class cmdArguments {
+public class cmdArguments implements Date_Time {
     String[] args;
     Statement stmt = Connection_establish.dbms_connect();
 
@@ -114,7 +115,11 @@ public class cmdArguments {
             } catch (Exception e) {
                 System.out.println("Illegal argument or arguments does not match!!");
             }
-        } else if (Objects.equals(args[0], "--querybystatus") && Objects.equals(args[1], "resolved")) {
+        }
+
+        // QUERY FEEDBACK CMD
+
+        else if (Objects.equals(args[0], "--querybystatus") && Objects.equals(args[1], "resolved")) {
             ResultSet rst = stmt.executeQuery("select * from Query where Status = 'Resolved';");
             Admin_page.display_resultSet(rst, "Solved");
         } else if (Objects.equals(args[0], "--querybystatus") && Objects.equals(args[1], "unresolved")) {

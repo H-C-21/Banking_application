@@ -38,7 +38,7 @@ public class fixed_deposit extends loan_fd {
         try {
             Withdraw_Deposit withdraw = new Withdraw_Deposit(getStmt(), String.valueOf(getAcc()));
             if (!withdraw.withdraw(obj.getPrincipal_amount(), "FD AMOUNT")) {
-                System.out.println("Insufficient balance fro Fixed Deposit!!");
+                System.out.println("Insufficient balance for Fixed Deposit!!");
                 return;
             }
             getStmt().execute("insert into fixed_deposits (acc_no, amount, date_issued, installment_remaining, amount_remaining) " +
