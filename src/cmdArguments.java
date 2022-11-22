@@ -115,6 +115,27 @@ public class cmdArguments implements Date_Time {
             } catch (Exception e) {
                 System.out.println("Illegal argument or arguments does not match!!");
             }
+        } else if (Objects.equals(args[0], "--u") && Objects.equals(args[3], "addfd")) {
+            try {
+                int acc = Integer.parseInt(args[1]);
+                double a = Double.parseDouble(args[4]);
+                int year = Integer.parseInt(args[5]);
+                if (user_login(acc, args[2])) {
+                    double ROI = 5 + year / 10.00;
+                    double amount_left = a * pow((1 + (ROI / 100.00)), year);
+                    Withdraw_Deposit obj = new Withdraw_Deposit(stmt, String.valueOf(acc));
+                    if (!obj.withdraw(a, "FD AMOUNT")) {
+                        System.out.println("Insufficient balance for Fixed Deposit!!");
+                        return;
+                    }
+                    stmt.execute("insert into fixed_deposits (acc_no, amount, date_issued, installment_remaining, amount_remaining) " +
+                            "values(" + acc + ", " + a +
+                            ", '" + obj.getDate_Time() + "', " + year * 12 + ", '" + amount_left + "');");
+                    System.out.println("FD amount successfully withdrawn from your bank account.");
+                }
+            } catch (Exception e) {
+                System.out.println("Illegal argument or argument does not match!!");
+            }
         }
 
         // QUERY FEEDBACK CMD
@@ -155,6 +176,14 @@ public class cmdArguments implements Date_Time {
         } else if (Objects.equals(args[0], "--viewfeedback")) {
             Feedback_main obj = new Feedback_main(stmt);
             obj.list_all();
+        } else if (Objects.equals(args[0], "--addfeedback")) {
+            try {
+                stmt.execute("insert into Feedback values ('" + args[1] + "', '" + args[2] + "', '" +
+                        "" + args[3] + "',  '" + args[4] + "',  '" + getDate_Time() + "');");
+                System.out.println("Feedback submitted successfully. Thanks for giving us your valuable feedback.");
+            } catch (Exception e) {
+                System.out.println("Illegal argument or argument does not match!!");
+            }
         } else {
             System.out.println("Illegal argument or arguments does not match!!");
         }

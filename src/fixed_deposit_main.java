@@ -48,7 +48,10 @@ public class fixed_deposit_main extends fixed_deposit {
                 double a = interest_calculate();
                 System.out.println("Your total interest will be:" + a);
                 a += obj.getPrincipal_amount();
-                initialize_new(null, a, obj);
+                System.out.println("Enter 1 to confirm\nEnter anything else to exit");
+                if (Objects.equals(sc.nextLine(), "1")) {
+                    initialize_new(null, a, obj);
+                }
             } else if (Objects.equals(key, "2")) {
                 try {
                     ResultSet rst = getStmt().executeQuery("select `fd id`, amount, date_issued, installment_remaining, amount_remaining from fixed_deposits " +
