@@ -6,7 +6,12 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class InsuranceUtil implements Date_Time {
+public abstract class InsuranceUtil extends ConsoleColors implements Date_Time {
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
 
 
     static Scanner sc = new Scanner(System.in);
@@ -17,17 +22,16 @@ public class InsuranceUtil implements Date_Time {
         int count = 0;
         while (rst.next()) {
             if (Objects.equals(rst.getString(1), "Health")) {
-                return new Health(ins_id);
+                return new Health(ins_id,stmt);
             } else if (Objects.equals(rst.getString(1), "Life")) {
-                return new Life(ins_id);
+                return new Life(ins_id,stmt);
             } else if (Objects.equals(rst.getString(1), "Car")) {
-
-                return new Car(ins_id);
+                return new Car(ins_id,stmt);
             } else if (Objects.equals(rst.getString(1), "Home")) {
-                return new Home(ins_id);
+                return new Home(ins_id,stmt);
             }
         }
-        System.out.println("Error In Determining Type");
+        System.out.println("Invalid ID");
         return null;
     }
 
@@ -55,7 +59,7 @@ public class InsuranceUtil implements Date_Time {
         try {
             ResultSet rst1 = stmt.executeQuery("select ins_id, ins_type, date_issued,amount_dep " + "from insurance where acc_no = "
                     + acc + " AND status = 1;");
-            System.out.println("Insurance ID         Insurance Type           Date Issued                 Insured For");
+            System.out.println("Insurance ID         Insurance Type           Date Issued              Insured For");
 
 
             while (rst1.next()) {
@@ -68,7 +72,7 @@ public class InsuranceUtil implements Date_Time {
                 String today = Date_Time.getDate();
                 int n = Date_Time.getDateDiff(String.valueOf(iss));
 
-                int rate1 = getSchemeRate(type);
+               int rate1 = getSchemeRate(type);
                 int diff = 0;
                 try {
                     diff = (int) ((amt - (n * rate1)) / rate1);
@@ -76,12 +80,14 @@ public class InsuranceUtil implements Date_Time {
                     System.out.println(z);
                 }
                 if(diff>0) {
-                    String t = Date_Time.getDateMonYear(diff);
+                    String t = GREEN+Date_Time.getDateMonYear(diff)+ANSI_RESET;
                     System.out.printf("    " + "%-20d %-20s %-20s %-20s\n", id, type, iss, t);
                 }
                 else {
+
                     String t1 = Date_Time.getDateMonYear(diff*(-1));
-                    System.out.printf("    " + "%-20d %-20s %-20s Behind by %-20s\n", id, type, iss, t1);
+                    String t2 = (RED + "Behind by "+ t1 + ANSI_RESET);
+                    System.out.printf("    " + "%-20d %-20s %-20s %-20s\n", id, type, iss, t2);
                 }
                 ++counti;
             }
@@ -94,7 +100,7 @@ public class InsuranceUtil implements Date_Time {
         }
 
     }
-
+     abstract boolean authenticateAllInsurance(String acc);
 
     protected static boolean authenticateInsurance(Statement stmt,String str,int ins_id) throws SQLException {
         try {
@@ -176,12 +182,11 @@ public class InsuranceUtil implements Date_Time {
 
     public static void claimMain(Statement stmt,String acc) throws SQLException {
         System.out.println("Please Enter the Insurance ID of the Insurance you wish to claim");
-        String id1 = sc.nextLine();
-        int id = Integer.parseInt(id1);
+        int id = sc.nextInt();
         if(authenticateInsurance(stmt,acc,id)){
-            Insurance cl = getScheme(stmt,id);
-            cl.claimInsurance(stmt,acc);
-        }
+        Insurance cl = getScheme(stmt,id);
+        cl.claimInsurance(stmt,acc);
+    }
         else
             System.out.println("Please Enter an Active Insurance ID");
 
@@ -190,13 +195,12 @@ public class InsuranceUtil implements Date_Time {
     public static void depositMain(Statement stmt,String acc) throws SQLException {
 
         System.out.println("Please Enter the Insurance ID of the Insurance you wish to pay the premiums for");
-        String id1 = sc.nextLine();
-        int id = Integer.parseInt(id1);
+        int id = sc.nextInt();
 
         if(authenticateInsurance(stmt,acc,id)){
-            Insurance n = getScheme(stmt,id);
-            n.depositPremium(stmt,acc);
-        }
+        Insurance n = getScheme(stmt,id);
+        n.depositPremium(stmt,acc);
+    }
         else
             System.out.println("Please Enter a Valid Insurance ID");
     }
@@ -208,4 +212,5 @@ public class InsuranceUtil implements Date_Time {
 
 //stmt.execute("insert into insurance (acc_no, loan_am, date_issued, `ins_type`, `amount left`, `installment remaining`) " +         //"values(" + getAcc() + ", " + obj.getPrincipal_amount() +
 //", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');
+
 
