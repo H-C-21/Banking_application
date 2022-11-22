@@ -70,7 +70,7 @@ public class Main_Page {
             } catch (Exception e) {
                 System.out.println(e);
             }
-        }else {
+        } else {
             cmdArguments obj = new cmdArguments(args);
             obj.cmdRun();
         }
