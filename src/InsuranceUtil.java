@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -5,39 +6,117 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class InsuranceUtil {
+public class InsuranceUtil implements Date_Time {
+
+
     static Scanner sc = new Scanner(System.in);
 
-    public static void display(Statement stmt, String acc) {
-        System.out.println("Inside display");
+    protected static Insurance getScheme(Statement stmt,int ins_id) throws SQLException {
+
+        ResultSet rst = stmt.executeQuery("Select ins_type from insurance where ins_id = " + ins_id + ";");
+        int count = 0;
+        while (rst.next()) {
+            if (Objects.equals(rst.getString(1), "Health")) {
+                return new Health(ins_id);
+            } else if (Objects.equals(rst.getString(1), "Life")) {
+                return new Life(ins_id);
+            } else if (Objects.equals(rst.getString(1), "Car")) {
+
+                return new Car(ins_id);
+            } else if (Objects.equals(rst.getString(1), "Home")) {
+                return new Home(ins_id);
+            }
+        }
+        System.out.println("Error In Determining Type");
+        return null;
+    }
+
+    protected static int getSchemeRate(String s) throws SQLException {
+        if(s.equals("Health")){
+            return 10;
+        }
+        else if (s.equals("Life")){
+            return 15;
+        }
+        else if (s.equals("Car")){
+            return 5;
+        }
+        else if (s.equals("Home")){
+            return 5;
+        }
+        else
+            return 0;
+    }
+
+
+    public static void display(Statement stmt,String acc) throws SQLException {
+
         int counti = 0;
         try {
-            ResultSet rst1 = stmt.executeQuery("select ins_id, ins_type, date_issued,amount_dep " + "from insurance where acc_no = " + acc + ";");
-            System.out.println("Insurance ID         Insurance Type           Date Issued          Insured till");
+            ResultSet rst1 = stmt.executeQuery("select ins_id, ins_type, date_issued,amount_dep " + "from insurance where acc_no = "
+                    + acc + " AND status = 1;");
+            System.out.println("Insurance ID         Insurance Type           Date Issued                 Insured For");
+
+
             while (rst1.next()) {
 
                 int id = rst1.getInt("ins_id");
                 String type = rst1.getString("ins_type");
                 Date iss = rst1.getDate("date_issued");
                 int amt = rst1.getInt("amount_dep");
-                System.out.printf("    " + "%-20d %-20s %-20s %-20d\n", id, type, iss, amt);
+
+                String today = Date_Time.getDate();
+                int n = Date_Time.getDateDiff(String.valueOf(iss));
+
+                int rate1 = getSchemeRate(type);
+                int diff = 0;
+                try {
+                    diff = (int) ((amt - (n * rate1)) / rate1);
+                } catch (NumberFormatException z) {
+                    System.out.println(z);
+                }
+                if(diff>0) {
+                    String t = Date_Time.getDateMonYear(diff);
+                    System.out.printf("    " + "%-20d %-20s %-20s %-20s\n", id, type, iss, t);
+                }
+                else {
+                    String t1 = Date_Time.getDateMonYear(diff*(-1));
+                    System.out.printf("    " + "%-20d %-20s %-20s Behind by %-20s\n", id, type, iss, t1);
+                }
                 ++counti;
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        if (counti == 0) {
+        if (counti == 0){
             System.out.println();
-            System.out.println("You are Currently Not registered under any Insurance Schemes, Press 1 to opt\n");
+            System.out.println("You are Currently Not registered under any Insurance Schemes, Press 1 to opt");
         }
 
     }
 
-    public static void newInsurance(Statement stmt, String acc) {
+
+    protected static boolean authenticateInsurance(Statement stmt,String str,int ins_id) throws SQLException {
+        try {
+            ResultSet rs = stmt.executeQuery("Select * from insurance where ins_id = "+ins_id+" AND acc_no = "+str+" AND status = 1;");
+            while(rs.next()){
+                return true;
+            };
+            System.out.println("Invalid Insurance ID");
+            return false;
+
+        }catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+
+    public static void newInsurance(Statement  stmt, String acc){
 
         boolean running = true;
         int a = Integer.parseInt(acc);
-        while (running) {
+        while(running) {
             System.out.println("Select The Type of Insurance You Want to Opt for - ");
             System.out.println("Press 1 for Health Insurance");
             System.out.println("Press 2 for Life Insurance");
@@ -51,32 +130,38 @@ public class InsuranceUtil {
                     Health ins1 = new Health();
                     ins1.print();                         //Shows Insurance Plan Information and ask whether to proceed or not
                     String h1 = sc.nextLine();
+
                     if (Objects.equals(h1, "1")) {
-                        ins1.newInsurance(stmt, acc);
+                        ins1.newImp(stmt, acc);
                     }
                     break;
+
                 case "2":
                     Life ins2 = new Life();
                     ins2.print();
                     String h2 = sc.nextLine();
+
                     if (Objects.equals(h2, "1")) {
-                        ins2.newInsurance(stmt, acc);
+                        ins2.newImp(stmt, acc);
                     }
                     break;
+
                 case "3":
                     Car ins3 = new Car();
                     ins3.print();
                     String h3 = sc.nextLine();
+
                     if (Objects.equals(h3, "1")) {
-                        ins3.newInsurance(stmt, acc);
+                        ins3.newImp(stmt, acc);
                     }
                     break;
                 case "4":
                     Home ins4 = new Home();
                     ins4.print();
                     String h4 = sc.nextLine();
+
                     if (Objects.equals(h4, "1")) {
-                        ins4.newInsurance(stmt, acc);
+                        ins4.newImp(stmt, acc);
                     }
                     break;
 
@@ -85,11 +170,42 @@ public class InsuranceUtil {
                     break;
 
                 default:
-                    System.out.println("You have entered a Wrong key please select again");
+                    System.out.println("Wrong Key, please enter Correctly!!!");
                     break;
-            }
-            //stmt.execute("insert into insurance (acc_no, loan_am, date_issued, `ins_type`, `amount left`, `installment remaining`) " +         //"values(" + getAcc() + ", " + obj.getPrincipal_amount() +
-            //", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');
+            }}}
+
+    public static void claimMain(Statement stmt,String acc) throws SQLException {
+        System.out.println("Please Enter the Insurance ID of the Insurance you wish to claim");
+        String id1 = sc.nextLine();
+        int id = Integer.parseInt(id1);
+        if(authenticateInsurance(stmt,acc,id)){
+            Insurance cl = getScheme(stmt,id);
+            cl.claimInsurance(stmt,acc);
         }
+        else
+            System.out.println("Please Enter an Active Insurance ID");
+
     }
+
+    public static void depositMain(Statement stmt,String acc) throws SQLException {
+
+        System.out.println("Please Enter the Insurance ID of the Insurance you wish to pay the premiums for");
+        String id1 = sc.nextLine();
+        int id = Integer.parseInt(id1);
+
+        if(authenticateInsurance(stmt,acc,id)){
+            Insurance n = getScheme(stmt,id);
+            n.depositPremium(stmt,acc);
+        }
+        else
+            System.out.println("Please Enter a Valid Insurance ID");
+    }
+
+
+
+
 }
+
+//stmt.execute("insert into insurance (acc_no, loan_am, date_issued, `ins_type`, `amount left`, `installment remaining`) " +         //"values(" + getAcc() + ", " + obj.getPrincipal_amount() +
+//", '" + obj.getTime() + "', '" + type + "', " + amount_left + ", '" + obj.getYear() * 12 + "');
+

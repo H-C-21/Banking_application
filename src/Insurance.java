@@ -1,15 +1,23 @@
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Insurance implements Date_Time {
+public class Insurance extends InsuranceUtil implements Date_Time {
     static int count = 1;
-    private String name;
-    static protected double rate;
+    protected int ins_id;
+    static protected int rate;
     static protected int Claim;
     public String scheme = getClass().getSimpleName();     //For Telling what type of insurance this is by name (Health,life etc...)
 
-    public double getRate() {
+    Insurance() {
+    }
+
+    Insurance(int ins_id) {
+        ins_id = this.ins_id;
+    }
+
+    public int getRate() {
         return rate;
     }
 
@@ -17,8 +25,8 @@ public class Insurance implements Date_Time {
         return Claim;
     }
 
-    protected void setClaim(int claim) {
-        Claim = claim;
+    protected int getIns_id() {
+        return this.ins_id;
     }
 
     public double balance(int acc, Statement stmt) throws SQLException {      //YEh main mein implment krdena ???
@@ -26,23 +34,29 @@ public class Insurance implements Date_Time {
         return rst1.getDouble("balance");
     }
 
-    protected void print() {
+    protected int print() {
 
         System.out.println("You Have Selected " + scheme + " Insurance");
-        System.out.println("Daily Rate ----  " + this.getRate() + "    " + "  Claim  ----  INR" + this.getClaim());
+        System.out.println("Daily Rate ---->  " + this.getRate() + "    " + "  Claim  ---->  " + this.getClaim());
+
         System.out.println("Press 1 to Proceed to Confirm");
         System.out.println("Press Any Other Key to Go Back");
+
+        return this.getClaim();
     }
 
-    protected void newInsurance(Statement stmt, String acc) {
+
+    public void newImp(Statement stmt, String acc) {
         try {
 
             ResultSet cnt = stmt.executeQuery("select max(ins_id) as k from insurance");
 
-            double count2 = 0;
+            double count2 = 1;
             while (cnt.next()) {
-                count2 = cnt.getDouble(1);
+                double count1 = cnt.getDouble(1);
+                count2 = count1;
             }
+
             int account = Integer.parseInt(acc);
             Withdraw_Deposit n = new Withdraw_Deposit(stmt, acc);
             if (n.withdraw(500, "INSURANCE REGISTRATION")) {
@@ -52,68 +66,133 @@ public class Insurance implements Date_Time {
               "VALUES(" + account + ",'" + scheme + "',4,'"+ date + "')");
             */
 
-                String date1 = getDate();
+                String date1 = Date_Time.getDate();
+                int l = (int) (count2 + count2 / 110);
                 stmt.execute("insert into insurance (acc_no, ins_type, ins_id, date_issued) " +
                         "values(" + account + ", '" + scheme +
-                        "', " + ((count2 + count2 / 110) + 101) + ", '" + date1 + "');");
+                        "', " + l + ", '" + date1 + "');");
 
-                int l = (int) ((count2 + count2 / 110) + 101);
-                System.out.println();
                 System.out.println("You Have Successfully Opted for " + scheme + " Insurance, Your Insurance ID is " + l);
-                System.out.println("Default Starting amount of 500 has been deducted from your Account, this will go towards future premium payments");
+                System.out.println("The Default Starting amount of 500 has been deducted from your Account, this will go towards future premium payments");
                 System.out.println();
             } else
-                System.out.println("You Need a Minimum Balance of 500 to Purchase the Opted Insurance");
+                System.out.println("You Need a Minimum Balance of 500 in your account to Purchase the Opted Insurance");
         } catch (SQLException e) {
             System.out.println(e);
+
         }
     }
 
-    public static boolean ClaimInsurance(Statement stmt, String str, int ins_id) throws SQLException {
+    public void claimInsurance(Statement stmt, String str) throws SQLException {
         try {
-            stmt.execute("update account set balance = balance + '" + Claim + "' where acc_no =" + str + ";");
-            stmt.execute("insert into transactions (acc_no, amount)" +
-                    "select account.acc_no, '+" + Claim + "' from account where account.acc_no = '" + str + "' LIMIT 1");
-            System.out.println("Your Insurance Claim has been transferred to your Account, Thank You for using our services");
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e);
+
+            if (authenticateInsurance(stmt, str, getIns_id())) {
+                //Insurance claim = getScheme(stmt, ins_id);
+                Withdraw_Deposit n = new Withdraw_Deposit(stmt, str);
+                if (n.deposit(this.getClaim(), "INSURANCE CLAIM")) {
+
+                    stmt.execute("update insurance set status = 0 where acc_no =" + str + " AND ins_id = " + ins_id + ";");
+
+                    System.out.println("Your Insurance Claim amounting to " + getClaim() + " for the scheme No." + this.getIns_id() + " has been transferred to your Account,");
+                    System.out.println("The Claimed Insurance Scheme with the Insurance is Henceforth no longer active");
+                    System.out.println("Thank You for using our services");
+                }
+            } else
+                System.out.println("Failed To Claim Insurance Please Enter Correct ID");
+        } catch (SQLException b) {
+            System.out.println(b);
         }
-        System.out.println("Claim Failed");
+    }
+
+    public boolean depositPremium(Statement stmt, String str) throws SQLException {
+        System.out.println("Enter The Amount You Wish to Deposit");
+        double dep = 0;
+        try {
+            dep = sc.nextDouble();
+        } catch (Exception IOException) {
+            System.out.println();
+        }  //MAKE SURE DEP IS POSITIVE ALWAYS
+
+
+        Withdraw_Deposit n5 = new Withdraw_Deposit(stmt, str);
+        if (dep > 0) {
+            if (n5.withdraw(dep, "INSURANCE PREMIUM")) {
+                try {
+                    //stmt.execute("update insurance SET amount_dep = 1000 where acc_no = "+str+" AND ins_id = " + ins_id + " ;");
+                    stmt.execute("update insurance set amount_dep = amount_dep + " + dep + " where acc_no ="
+                            + str + " AND ins_id = " + ins_id + " ;");
+
+                    System.out.println("Transaction Successful, Rs." + dep + " Have been Deducted from your account");
+                    return true;
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } else
+                System.out.println("Please Ensure You Have Sufficient Balance in Your Account");
+            return false;
+        }
+        System.out.println("Please Enter a Valid Value");
         return false;
     }
 }
 
-
 class Health extends Insurance {
+    Health() {
+    }
+
+    Health(int ins_id) {
+        this.ins_id = ins_id;
+    }
 
     static {
-        rate = 100;
-        Claim = 200000;
+        rate = 10;
+        Claim = 250000;
     }
 }
 
 class Life extends Insurance {
 
+    Life() {
+    }
+
+    Life(int ins_id) {
+        this.ins_id = ins_id;
+    }
+
     static {
-        rate = 150;
-        Claim = 300000;
+        rate = 15;
+        Claim = 500000;
     }
 }
 
 class Car extends Insurance {
 
+    Car() {
+    }
+
+    Car(int ins_id) {
+        this.ins_id = ins_id;
+    }
+
     static {
-        rate = 50;
+        rate = 5;
         Claim = 150000;
     }
 }
 
 class Home extends Insurance {
 
+    Home() {
+    }
+
+    Home(int ins_id) {
+        this.ins_id = ins_id;
+    }
+
     static {
-        rate = 50;
-        Claim = 200000;
+        rate = 5;
+        Claim = 350000;
     }
 }
+
 
