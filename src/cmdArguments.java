@@ -184,6 +184,41 @@ public class cmdArguments implements Date_Time {
             } catch (Exception e) {
                 System.out.println("Illegal argument or argument does not match!!");
             }
+        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "transactions")) {
+            try {
+                csvReader obj = new csvReader(args[2]);
+                obj.Transactions();
+            } catch (Exception e) {
+                System.out.println("Illegal argument or arguments does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "accounts")) {
+            try {
+                csvReader obj = new csvReader(args[2]);
+                obj.Accounts();
+            } catch (Exception e) {
+                System.out.println("Illegal argument or arguments does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "fd")) {
+            try {
+                csvReader obj = new csvReader(args[2]);
+                obj.FixedDeposits();
+            } catch (Exception e) {
+                System.out.println("Illegal argument or arguments does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "feedback")) {
+            try {
+                csvReader obj = new csvReader(args[2]);
+                obj.Feedback();
+            } catch (Exception e) {
+                System.out.println("Illegal argument or arguments does not match!!");
+            }
+        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "insurance")) {
+            try {
+                csvReader obj = new csvReader(args[2]);
+                obj.Insurance();
+            } catch (Exception e) {
+                System.out.println("Illegal argument or arguments does not match!!");
+            }
         } else {
             System.out.println("Illegal argument or arguments does not match!!");
         }
