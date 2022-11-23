@@ -28,7 +28,9 @@ BANKING APPLICATION
 
 * --u [acc_no] [password] viewinsurance                           `View a Users active schemes`
 
-* --u [acc_no] [password] searchinsname [string]                  `Search for a users scheme with the same name as the input string, allows partial search`
+* --u [acc_no] [password] searchinsname [string]                  `Search for schemes with the same name as the input string, allows partial search`
+
+* --u [acc_no] [password] searchinsid [ID]                  `Search for user schemes with the same ID` 
 
 
 
