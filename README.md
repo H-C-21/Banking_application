@@ -24,6 +24,14 @@ BANKING APPLICATION
 * --querysolve [query id]                                                                                                                                                                                                                     `solve an admin defined query by query id`
 * --querydisplay [query id]                                                                                                                                                                                                                  `display a specific query pertaining to its query id`
 * --querydelete [query id]                                                                                                                                                                                                                   `delete a specific query with a query id`
+* --u [acc_no] [password] newinsurance                            `Opt for a New Insurance Scheme`
+
+* --u [acc_no] [password] viewinsurance                           `View a Users active schemes`
+
+* --u [acc_no] [password] searchinsname [string]                  `Search for a users scheme with the same name as the input string, allows partial search`
+
+
+
 * --viewfeedback                                                                                                                                                                                                                                    `lists all feedback stored in the database`
 * --addfeedback [name] [email_id] [feedback text] [rating = (POOR, AVERAGE, GOOD)]                                                                                             `submits a feedback to the system`
 * --addcsv [table_name(accounts, transactions, fd, feedback, insurance)] [file_path = (ex-/home/mehul/Deesktop/filename.csv)]             `add data from a csv file into the database`
