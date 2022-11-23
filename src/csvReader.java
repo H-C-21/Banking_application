@@ -91,7 +91,7 @@ public class csvReader {
         }
     }
 
-    public void FixedDeposits(){
+    public void FixedDeposits() {
         try {
             connection = DriverManager.getConnection(jdbcURL, username, password);
             connection.setAutoCommit(false);
@@ -134,7 +134,7 @@ public class csvReader {
         }
     }
 
-    public void Feedback(){
+    public void Feedback() {
         try {
             connection = DriverManager.getConnection(jdbcURL, username, password);
             connection.setAutoCommit(false);
@@ -175,7 +175,7 @@ public class csvReader {
         }
     }
 
-    public void Insurance(){
+    public void Insurance() {
         try {
             connection = DriverManager.getConnection(jdbcURL, username, password);
             connection.setAutoCommit(false);
