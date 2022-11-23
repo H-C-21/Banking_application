@@ -1,15 +1,3 @@
-package CMD;
-
-import Account.Account_Main;
-import CSVReader.csvReader;
-import Connection.Connection_establish;
-import DateTime.Date_Time;
-import Loan_FD.Loan_helper;
-import Loan_FD.Loan_main;
-import Pages.Admin_page;
-import Query_Feedback.Feedback_main;
-import Transactions.Withdraw_Deposit;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,7 +33,7 @@ public class cmdArguments implements Date_Time {
         return counter != 0;
     }
 
-    public void cmdRun() throws SQLException, ClassNotFoundException {
+    void cmdRun() throws SQLException, ClassNotFoundException {
         if (Objects.equals(args[0], "--add")) {
             Account_Main obj = new Account_Main(stmt);
             obj.create();
@@ -142,7 +130,7 @@ public class cmdArguments implements Date_Time {
                     }
                     stmt.execute("insert into fixed_deposits (acc_no, amount, date_issued, installment_remaining, amount_remaining) " +
                             "values(" + acc + ", " + a +
-                            ", '" + getDate_Time() + "', " + year * 12 + ", '" + amount_left + "');");
+                            ", '" + obj.getDate_Time() + "', " + year * 12 + ", '" + amount_left + "');");
                     System.out.println("FD amount successfully withdrawn from your bank account.");
                 }
             } catch (Exception e) {
@@ -196,42 +184,68 @@ public class cmdArguments implements Date_Time {
             } catch (Exception e) {
                 System.out.println("Illegal argument or argument does not match!!");
             }
-        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "transactions")) {
+        }
+
+        else if(Objects.equals(args[0], "--u") && Objects.equals(args[3], "viewinsurance")){
             try {
-                csvReader obj = new csvReader(args[2]);
-                obj.Transactions();
-            } catch (Exception e) {
-                System.out.println("Illegal argument or arguments does not match!!");
+                int acc = Integer.parseInt(args[1]);
+                if (user_login(acc, args[2])) {
+                    InsuranceUtil.display(stmt,args[1]);
+                }
+
+        } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }}
+
+        else if(Objects.equals(args[0], "--u") && Objects.equals(args[3], "newinsurance")){
+            int acc = Integer.parseInt(args[1]);
+            if (user_login(acc, args[2])) {
+                Insurance.newInsurance(stmt,args[1]);
             }
-        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "accounts")) {
-            try {
-                csvReader obj = new csvReader(args[2]);
-                obj.Accounts();
-            } catch (Exception e) {
-                System.out.println("Illegal argument or arguments does not match!!");
+        }
+
+        else if(Objects.equals(args[0], "--u") && Objects.equals(args[3],"claiminsurance")){
+            int acc = Integer.parseInt(args[1]);
+            if (user_login(acc, args[2])) {
+                InsuranceUtil.claimMain(stmt,args[1]);
             }
-        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "fd")) {
-            try {
-                csvReader obj = new csvReader(args[2]);
-                obj.FixedDeposits();
-            } catch (Exception e) {
-                System.out.println("Illegal argument or arguments does not match!!");
+        }
+
+        else if(Objects.equals(args[0], "--u") && Objects.equals(args[3],"depositinsurance")){
+            int acc = Integer.parseInt(args[1]);
+            if(user_login(acc, args[2])){
+                InsuranceUtil.depositMain(stmt,args[1]);
             }
-        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "feedback")) {
-            try {
-                csvReader obj = new csvReader(args[2]);
-                obj.Feedback();
-            } catch (Exception e) {
-                System.out.println("Illegal argument or arguments does not match!!");
+        }
+        else if(Objects.equals(args[0], "--u") && Objects.equals(args[3],"searchinsname")){
+            int acc = Integer.parseInt(args[1]);     //--u account_no password searchinsname "searchterm"
+            if(user_login(acc, args[2])){
+                Insurance b = new Insurance(stmt);
+                b.getUserSchemes(args[4],args[1]);
             }
-        } else if (Objects.equals(args[0], "--addcsv") && Objects.equals(args[1], "insurance")) {
-            try {
-                csvReader obj = new csvReader(args[2]);
-                obj.Insurance();
-            } catch (Exception e) {
-                System.out.println("Illegal argument or arguments does not match!!");
+        }
+
+        else if (Objects.equals(args[0], "--u") && Objects.equals(args[3], "searchinsid")){
+            int acc = Integer.parseInt(args[1]);
+            if (user_login(acc, args[2])) {
+                try {
+                    String id = args[4];
+                    int in_id = Integer.parseInt(id);
+
+                    Insurance a = InsuranceUtil.getScheme(stmt, in_id);
+                    if(a != null){
+                        if(a.authenticateAllInsurance(args[1])){
+                            System.out.println(a);
+                        }}
+                    else {
+                        System.out.println();
+                    }} catch(NumberFormatException a){
+                    System.out.println("Please Enter a Correct ID");
+                }}
             }
-        } else {
+
+         else if (Objects.equals(args[0],"--")){
+
             System.out.println("Illegal argument or arguments does not match!!");
         }
     }
