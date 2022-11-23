@@ -34,7 +34,7 @@ public class fixed_deposit extends loan_fd {
     }
 
     @Override
-    public void initialize_new(String type, double amount_left, Loan_fd obj) {
+    public void initialize_new(String type, double amount_left, LFD_Main obj) {
         try {
             Withdraw_Deposit withdraw = new Withdraw_Deposit(getStmt(), String.valueOf(getAcc()));
             if (!withdraw.withdraw(obj.getPrincipal_amount(), "FD AMOUNT")) {

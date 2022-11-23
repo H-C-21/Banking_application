@@ -1,9 +1,9 @@
 public interface Query_Fdb {
-    query_fdb take_input();
-    void submit(query_fdb obj);
+    QF_Main take_input();
+    void submit(QF_Main obj);
 }
 
-class query_fdb implements Date_Time{
+class QF_Main implements Date_Time{
     private String name;
     private String email_id;
     private String text;

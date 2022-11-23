@@ -31,7 +31,7 @@ public class Feedback_main extends query_fdb_help {
     }
 
     @Override
-    public void submit(query_fdb obj) {
+    public void submit(QF_Main obj) {
         String rating = input_rating();
         try {
             getStmt().execute("insert into Feedback values ('" + obj.getName() + "', '" + obj.getEmail_id() + "', '" +

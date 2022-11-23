@@ -9,7 +9,7 @@ interface Loan_fd_help {
 
     boolean installment_pay(double amount, int acc, int id);
 
-    void initialize_new(String type, double amount_left, Loan_fd obj);
+    void initialize_new(String type, double amount_left, LFD_Main obj);
 }
 
 abstract class loan_fd implements Loan_fd_help {
@@ -17,13 +17,13 @@ abstract class loan_fd implements Loan_fd_help {
 
     private int acc;
 
-    private Loan_fd object;
+    private LFD_Main object;
 
-    public Loan_fd getObject() {
+    public LFD_Main getObject() {
         return object;
     }
 
-    public void setObject(Loan_fd object) {
+    public void setObject(LFD_Main object) {
         this.object = object;
     }
 
@@ -57,7 +57,7 @@ abstract class loan_fd implements Loan_fd_help {
 
 
     public void loan_approve(double ROI, String type) {
-        Loan_fd obj = Loan_helper.loan_input(ROI);
+        LFD_Main obj = Loan_helper.loan_input(ROI);
         setObject(obj);
         double a = interest_calculate();
         System.out.println("Your interest will be:" + a);
@@ -71,7 +71,7 @@ abstract class loan_fd implements Loan_fd_help {
     }
 }
 
-class Loan_fd implements Date_Time {
+class LFD_Main implements Date_Time {
     private double principal_amount;
     private final String dateIssued = getDate_Time();
     private double roi;

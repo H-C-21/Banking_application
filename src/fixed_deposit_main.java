@@ -9,9 +9,9 @@ public class fixed_deposit_main extends fixed_deposit {
         super(stmt, acc);
     }
 
-    static Loan_fd input() {
+    static LFD_Main input() {
         Scanner sc = new Scanner(System.in);
-        Loan_fd obj = new Loan_fd();
+        LFD_Main obj = new LFD_Main();
         while (true) {
             try {
                 System.out.print("Enter the amount for FD:");
@@ -42,7 +42,7 @@ public class fixed_deposit_main extends fixed_deposit {
             Scanner sc = new Scanner(System.in);
             String key = sc.nextLine();
             if (Objects.equals(key, "1")) {
-                Loan_fd obj = input();
+                LFD_Main obj = input();
                 obj.setRoi(5 + obj.getYear() / 10.00);
                 setObject(obj);
                 double a = interest_calculate();

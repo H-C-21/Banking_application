@@ -53,7 +53,14 @@ public class User_Page {
                 String key2 = sc.nextLine();
                 if (Objects.equals(key2, "1")) {
                     System.out.print("Enter amount to be deposited:");
-                    double amount = sc.nextDouble();
+                    double amount;
+                    try {
+                        amount = sc.nextDouble();
+                    } catch (Exception e) {
+                        System.out.println("Failed! Enter numeric values!");
+                        sc.nextLine();
+                        continue;
+                    }
                     sc.nextLine();
                     if (obj.deposit(amount, "SELF")) {
                         System.out.println("Amount deposited successfully");
@@ -71,7 +78,14 @@ public class User_Page {
                     System.out.print("Enter password:");
                     if (Objects.equals(sc.nextLine(), pass)) {
                         System.out.print("Enter the amount to be withdrawn:");
-                        double amount = sc.nextDouble();
+                        double amount;
+                        try {
+                            amount = sc.nextDouble();
+                        } catch (Exception e) {
+                            System.out.println("Failed! Enter numeric values!");
+                            sc.nextLine();
+                            continue;
+                        }
                         sc.nextLine();
                         if (obj.withdraw(amount, "SELF")) {
                             System.out.println("Amount successfully withdrawn. Remaining balance is:" + (balance - amount));

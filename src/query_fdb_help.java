@@ -13,9 +13,9 @@ abstract class query_fdb_help implements Query_Fdb {
     }
 
     @Override
-    public query_fdb take_input() {
+    public QF_Main take_input() {
         Scanner sc = new Scanner(System.in);
-        query_fdb obj = new query_fdb();
+        QF_Main obj = new QF_Main();
         System.out.print("Enter your name:");
         obj.setName(sc.nextLine());
         System.out.print("Enter your Email ID:");

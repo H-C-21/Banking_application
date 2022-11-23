@@ -51,7 +51,7 @@ public class Query_main extends query_fdb_help {
     }
 
     @Override
-    public void submit(query_fdb obj) {
+    public void submit(QF_Main obj) {
         try {
             getStmt().execute("insert into Query (Name, Email_ID, Problem, date) values ('" + obj.getName() + "', '" + obj.getEmail_id() + "', " +
                     "'" + obj.getText() + "', '" + obj.get_time() + "');");
@@ -78,7 +78,7 @@ public class Query_main extends query_fdb_help {
             } else if (Objects.equals(key, "2")) {
                 list_all();
             } else if (Objects.equals(key, "3")) {
-                query_fdb obj = take_input();
+                QF_Main obj = take_input();
                 submit(obj);
             } else {
                 break;

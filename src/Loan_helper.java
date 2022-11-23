@@ -18,9 +18,9 @@ public class Loan_helper extends loan_fd {
                 Press anything else for exit""");
     }
 
-    public static Loan_fd loan_input(double ROI) {
+    public static LFD_Main loan_input(double ROI) {
         Scanner sc = new Scanner(System.in);
-        Loan_fd obj = new Loan_fd();
+        LFD_Main obj = new LFD_Main();
         obj.setRoi(ROI);
         System.out.print("Enter the amount you want to take loan:");
         while (true) {
@@ -73,7 +73,7 @@ public class Loan_helper extends loan_fd {
     }
 
     @Override
-    public void initialize_new(String type, double amount_left, Loan_fd obj) {
+    public void initialize_new(String type, double amount_left, LFD_Main obj) {
         try {
             getStmt().execute("insert into loans (acc_no, loan_amount, date_issued, `loan type`, `amount left`, `installment remaining`) " +
                     "values(" + getAcc() + ", " + obj.getPrincipal_amount() +

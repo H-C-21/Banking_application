@@ -51,7 +51,7 @@ public class Main_Page {
                             obj.main();
                         } else if (Objects.equals(key, "5")) {
                             Feedback_main obj = new Feedback_main(stmt);
-                            query_fdb obj1 = obj.take_input();
+                            QF_Main obj1 = obj.take_input();
                             obj.submit(obj1);
                         } else {
                             System.out.println("Thank You for using the App!!");
