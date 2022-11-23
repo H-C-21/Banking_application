@@ -4,7 +4,11 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Loan_main {
+public class Loan_main extends Loan_helper {
+
+    public Loan_main(Statement stmt, int acc) {
+        super(stmt, acc);
+    }
 
     public static int display(Statement stmt, int acc) {
         int count = 0;
@@ -23,7 +27,7 @@ public class Loan_main {
         return count;
     }
 
-    public static void loan_main(Statement stmt, int acc) {
+    public void loan_main() {
         while (true) {
             System.out.println("""
                     Enter 1 to view your loans
@@ -33,12 +37,12 @@ public class Loan_main {
             Scanner sc = new Scanner(System.in);
             String key = sc.nextLine();
             if (Objects.equals(key, "1")) {
-                if (display(stmt, acc) == 0) {
+                if (display(getStmt(), getAcc()) == 0) {
                     System.out.println("You do not have any active loan currently.");
                 }
             } else if (Objects.equals(key, "2")) {
                 System.out.println("Fetching your loans....");
-                if (display(stmt, acc) == 0) {
+                if (display(getStmt(), getAcc()) == 0) {
                     System.out.println("You do not have any active loan currently");
                     continue;
                 }
@@ -54,17 +58,15 @@ public class Loan_main {
                     }
                 }
                 try {
-                    ResultSet rst = stmt.executeQuery("select `amount left`, `installment remaining` from loans where loan_id = " + id + ";");
+                    ResultSet rst = getStmt().executeQuery("select `amount left`, `installment remaining` from loans where loan_id = " + id + ";");
                     rst.next();
                     double amount = rst.getDouble(1) / rst.getInt(2);
-                    Loan_helper obj = new Loan_helper(stmt, acc);
-                    obj.installment_pay(amount, acc, id);
+                    installment_pay(amount, getAcc(), id);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
             } else if (Objects.equals(key, "3")) {
-                Loan_helper obj = new Loan_helper(stmt, acc);
-                obj.Loan_take();
+                Loan_take();
             } else {
                 break;
             }

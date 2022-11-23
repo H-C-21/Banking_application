@@ -97,7 +97,8 @@ public class User_Page {
                 int acc = Integer.parseInt(str);
                 obj.InsurancePage(stmt, str);
             } else if (Objects.equals(key, "7")) {
-                Loan_main.loan_main(stmt, Integer.parseInt(str));
+                Loan_main obj = new Loan_main(stmt, Integer.parseInt(str));
+                obj.loan_main();
             } else if (Objects.equals(key, "8")) {
                 fixed_deposit_main obj = new fixed_deposit_main(stmt, Integer.parseInt(str));
                 obj.fd_main();

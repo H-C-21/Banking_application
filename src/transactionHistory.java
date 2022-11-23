@@ -35,8 +35,8 @@ public class transactionHistory {
         } else {
             System.out.println("Enter 1 for deletion of history\nEnter any other key to Exit");
             Scanner sc = new Scanner(System.in);
-            int number = sc.nextInt();
-            if (Objects.equals(number, 1)) {
+            String number = sc.nextLine();
+            if (Objects.equals(number, "1")) {
                 delete_transaction_history(stmt, str);
             }
         }
