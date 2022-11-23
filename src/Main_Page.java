@@ -63,12 +63,12 @@ public class Main_Page {
                         try {
                             login_flag = User_Page.page(stmt, str);
                         } catch (Exception e) {
-                            System.out.println(e);
+                            System.out.println("Unknown error occurred! Returning to Main page!");
                         }
                     }
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("Some unknown error!");
             }
         } else {
             cmdArguments obj = new cmdArguments(args);
