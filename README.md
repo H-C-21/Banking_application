@@ -3,9 +3,9 @@ BANKING APPLICATION
 ### OOP Project Using JAVA with MYSQL Database
 
 #### Members:
-1. Mehul Agarwal (Project Lead)
+1. Harshit Chauhan (Project Lead)
 2. Kushalkumar Dipakkumar Gajjar
-3. Harshit Chauhan
+3. Mehul Agarwal
 4. Virendra Yadav
 5. Vinay Yadam
 
